@@ -70,7 +70,6 @@ class WaterMeter(models.Model):
                                     verbose_name='Тариф',)
 
     class Meta:
-        # Значение сортировать по дате
         ordering = ('value__date',)
         default_related_name = 'water_meter'
         verbose_name = 'Счетчик воды'
