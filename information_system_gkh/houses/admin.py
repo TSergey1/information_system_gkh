@@ -43,5 +43,4 @@ class HouseAdmin(admin.ModelAdmin):
         'apartment',
     )
     search_fields = ('address', )
-    list_filter = ('author', 'score')
     empty_value_display = '-пусто-'

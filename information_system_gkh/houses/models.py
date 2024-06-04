@@ -3,7 +3,8 @@ from django.db import models
 
 class Tariff(models.Model):
     """Модель тарифа."""
-    name = models.CharField('Название', max_length=255)
+    name = models.CharField('Название', max_length=150)
+    units = models.CharField('Единица измерения', max_length=10)
     price = models.DecimalField(max_digits=5,
                                 decimal_places=2,
                                 verbose_name='Цена',)
