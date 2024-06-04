@@ -118,12 +118,3 @@ class House(models.Model):
 
     def __str__(self):
         return self.address
-
-
-
-
-
-
-
-
-
