@@ -1,11 +1,12 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from api.views import LoginView, ProfileView, VerifyView
+from api.views import HouseViewSet
 
-app_name = 'api'
+router = DefaultRouter()
+
+router.register(r'houses', HouseViewSet, basename='houses')
 
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
-    path('verify/', VerifyView.as_view(), name="verify"),
-    path('profile/', ProfileView.as_view(), name='profile')
+    path('', include(router.urls)),
 ]
