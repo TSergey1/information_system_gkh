@@ -6,26 +6,32 @@ DICT_ERRORS = {
    'value_max': 'Показания должны содержать не более 5 символов'
 }
 
+TYPE_WATER = [
+        ('hot', 'Горячая'),
+        ('cold', 'Холодная'),
+    ]
+
 
 class Tariff(models.Model):
     """Модель тарифа."""
-    name = models.CharField('Название', max_length=50)
-    units = models.CharField('Единица измерения', max_length=10)
+    NAME_TARIFF = [
+        ('hot', 'Горячая вода'),
+        ('cold', 'Холодная вода'),
+        ('property', 'Содержание общего имущества')
+    ]
+    name = models.CharField('Название', choices=NAME_TARIFF,
+                            unique=True, max_length=50)
     price = models.DecimalField(max_digits=5,
                                 decimal_places=2,
                                 verbose_name='Цена',)
-    date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Дата и время изменения тарифа',
-    )
 
     class Meta:
-        ordering = ('date',)
+        ordering = ('name',)
         verbose_name = 'Тариф'
         verbose_name_plural = 'Тарифы'
 
     def __str__(self):
-        return self.price
+        return self.name
 
 
 class ValueWaterMeter(models.Model):
@@ -38,7 +44,7 @@ class ValueWaterMeter(models.Model):
         ],
         help_text='Введите показания до запятой'
     )
-    date = models.DateTimeField(
+    date = models.DateField(
         auto_now_add=True,
         verbose_name='Дата и время показаний',
     )
@@ -55,29 +61,21 @@ class ValueWaterMeter(models.Model):
 class WaterMeter(models.Model):
     """Модель счетчика воды."""
 
-    TYPE_WATER = [
-        ('hot', 'Горячая'),
-        ('cold', 'Холодная'),
-    ]
     number = models.CharField(
-        unique=True,
         blank=True,
+        null=True,
         max_length=50,
         verbose_name='Номер прибора'
     )
     value = models.ForeignKey(
         ValueWaterMeter,
         on_delete=models.CASCADE,
+        blank=True,
         verbose_name='Показания счетчика',
     )
-    type_water = models.CharField(
-        max_length=50,
-        choices=TYPE_WATER,
-        default='cold',
-        verbose_name='Тип воды'
-    )
-    tariff = models.ManyToManyField(Tariff,
-                                    verbose_name='Тариф',)
+    tariff = models.ForeignKey(Tariff,
+                               on_delete=models.CASCADE,
+                               verbose_name='Тариф',)
 
     class Meta:
         ordering = ('value__date',)
@@ -91,38 +89,32 @@ class WaterMeter(models.Model):
 
 class Apartment(models.Model):
     """Модель квартиры."""
-    namber = models.PositiveSmallIntegerField(unique=True,
-                                              verbose_name='Номер квартиры')
+    number = models.PositiveSmallIntegerField(verbose_name='Номер квартиры')
     area = models.FloatField(verbose_name='Площадь квартиры')
     water_meter = models.ForeignKey(
         WaterMeter,
         on_delete=models.CASCADE,
         verbose_name='Cчетчик воды',
+        blank=True,
     )
+    house = models.ForeignKey('House', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('namber',)
-        default_related_name = 'apartment'
+        ordering = ('number',)
+        default_related_name = 'apartments'
         verbose_name = 'Квартира'
         verbose_name_plural = 'Квартиры'
 
     def __str__(self):
-        return self.namber
+        return self.number
 
 
 class House(models.Model):
     """Модель дома."""
-
-    apartment = models.ForeignKey(
-        Apartment,
-        on_delete=models.CASCADE,
-        verbose_name='Квартира',
-    )
     address = models.CharField(max_length=255, verbose_name='Адрес дома',)
 
     class Meta:
         ordering = ('address',)
-        default_related_name = 'houses'
         verbose_name = 'Дом'
         verbose_name_plural = 'Дома'
 

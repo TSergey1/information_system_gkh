@@ -1,4 +1,4 @@
-# Тестовое задание (авторизация по смс)
+# Тестовое задание (кварт плата)
 [![License MIT](https://img.shields.io/badge/licence-MIT-green)](https://opensource.org/license/mit/)
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
@@ -50,6 +50,8 @@ git clone git@github.com:TSergey1/....git
 
  Запускаем проект:
 Для запуска проекта, необходимо выполнить в каталоге приложения: ``` docker compose up  ```
+
+Сервер слушает по адресу ``` http://127.0.0.1:8000 ```
 
 Сервер слушает по адресу ``` http://127.0.0.1:8000 ```
 

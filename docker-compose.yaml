@@ -38,5 +38,42 @@ services:
       migrate:
         condition: service_completed_successfully
 
+  redis:
+    image: redis:7.0.5-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+
+  task_worker:
+    build: .
+    container_name: task_worker
+    entrypoint: celery
+    command: -A information_system_gkh.celery.app worker -B --loglevel=DEBUG
+    restart: always
+    links:
+      - redis
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - web
+
+  flower:
+    container_name: flower
+    build: .
+    entrypoint: celery
+    command: -A cherry.celery.app flower
+    restart: always
+    links:
+      - redis
+    env_file:
+      - .env
+    depends_on:
+      - task_worker
+      - redis
+    ports:
+      - '5555:5555'
+
 volumes:
   pg_data:

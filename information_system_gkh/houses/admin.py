@@ -6,9 +6,9 @@ from .models import Apartment, House, Tariff, WaterMeter
 @admin.register(Tariff)
 class TariffAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'name',
         'price',
-        'date'
     )
     search_fields = ('name',)
     list_filter = ('name',)
@@ -20,7 +20,6 @@ class WaterMeterAdmin(admin.ModelAdmin):
     list_display = (
         'number',
         'value',
-        'type_water'
     )
     search_fields = ('number',)
     list_filter = ('number',)
@@ -30,8 +29,9 @@ class WaterMeterAdmin(admin.ModelAdmin):
 @admin.register(Apartment)
 class ApartmentAdmin(admin.ModelAdmin):
     list_display = (
-        'namber',
+        'number',
         'area',
+        'house',
     )
     empty_value_display = '-пусто-'
 
@@ -40,7 +40,6 @@ class ApartmentAdmin(admin.ModelAdmin):
 class HouseAdmin(admin.ModelAdmin):
     list_display = (
         'address',
-        'apartment',
     )
     search_fields = ('address', )
     empty_value_display = '-пусто-'
