@@ -1,9 +1,15 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
+
+
+DICT_ERRORS = {
+   'value_max': 'Показания должны содержать не более 5 символов'
+}
 
 
 class Tariff(models.Model):
     """Модель тарифа."""
-    name = models.CharField('Название', max_length=150)
+    name = models.CharField('Название', max_length=50)
     units = models.CharField('Единица измерения', max_length=10)
     price = models.DecimalField(max_digits=5,
                                 decimal_places=2,
@@ -26,7 +32,10 @@ class ValueWaterMeter(models.Model):
     """Модель показания счетчика."""
     value = models.PositiveIntegerField(
         verbose_name='Показания счетчика',
-        max_length=5,
+        validators=[
+            MaxValueValidator(5, message='{0}'.format(
+                DICT_ERRORS.get('value_max')))
+        ],
         help_text='Введите показания до запятой'
     )
     date = models.DateTimeField(
@@ -53,6 +62,7 @@ class WaterMeter(models.Model):
     number = models.CharField(
         unique=True,
         blank=True,
+        max_length=50,
         verbose_name='Номер прибора'
     )
     value = models.ForeignKey(
@@ -61,13 +71,12 @@ class WaterMeter(models.Model):
         verbose_name='Показания счетчика',
     )
     type_water = models.CharField(
+        max_length=50,
         choices=TYPE_WATER,
         default='cold',
         verbose_name='Тип воды'
     )
-
     tariff = models.ManyToManyField(Tariff,
-                                    on_delete=models.CASCADE,
                                     verbose_name='Тариф',)
 
     class Meta:
