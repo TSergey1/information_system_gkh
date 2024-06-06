@@ -41,16 +41,15 @@ class ApartmentSerializer(serializers.ModelSerializer):
     #         WaterMeter.objects.create(**water_meter)
     #     return apartment
 
-    def create(self, validated_data):
-        water_meters = validated_data.pop('water_meter')
-        w_t = []
-        for water_meter in water_meters:
-            WaterMeter.objects.create(**water_meter)
-        w = WaterMeter.objects.create(**water_meter)
-        w_t.append(w)
-        apartment = Apartment.objects.create(water_meter=w_t, **validated_data)
-        # WaterMeter.objects.create(**water_meter)
-        return apartment
+    # def create(self, validated_data):
+    #     water_meters = validated_data.pop('water_meter')
+    #     w_t = []
+    #     for water_meter in water_meters:
+    #         w = WaterMeter.objects.create(**water_meter)
+    #         w_t.append(w)
+    #     apartment = Apartment.objects.create(water_meter=w_t, **validated_data)
+    #     # WaterMeter.objects.create(**water_meter)
+    #     return apartment
 
 
 class HouseSerializer(serializers.ModelSerializer):
