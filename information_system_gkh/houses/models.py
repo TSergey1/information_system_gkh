@@ -71,6 +71,7 @@ class WaterMeter(models.Model):
         ValueWaterMeter,
         on_delete=models.CASCADE,
         blank=True,
+        null=True,
         verbose_name='Показания счетчика',
     )
     tariff = models.ForeignKey(Tariff,
@@ -95,7 +96,6 @@ class Apartment(models.Model):
         WaterMeter,
         on_delete=models.CASCADE,
         verbose_name='Cчетчик воды',
-        blank=True,
     )
     house = models.ForeignKey('House', on_delete=models.CASCADE)
 
@@ -111,7 +111,7 @@ class Apartment(models.Model):
 
 class House(models.Model):
     """Модель дома."""
-    address = models.CharField(max_length=255, verbose_name='Адрес дома',)
+    address = models.CharField(max_length=255, unique=True, verbose_name='Адрес дома',)
 
     class Meta:
         ordering = ('address',)
