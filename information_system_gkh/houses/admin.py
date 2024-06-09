@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Apartment, House, Tariff, WaterMeter
+from .models import (Apartment, House, Tariff, WaterMeter)
 
 
 @admin.register(Tariff)
@@ -18,11 +18,12 @@ class TariffAdmin(admin.ModelAdmin):
 @admin.register(WaterMeter)
 class WaterMeterAdmin(admin.ModelAdmin):
     list_display = (
-        'number',
         'value',
+        'date',
+        'apartment',
     )
-    search_fields = ('number',)
-    list_filter = ('number',)
+    search_fields = ('apartment',)
+    list_filter = ('apartment',)
     empty_value_display = '-пусто-'
 
 

@@ -5,7 +5,7 @@ from .core import rent_property, rent_water
 from houses.models import Apartment, Tariff
 
 
-# @shared_task
+@shared_task
 def start_calculation(id_house: int, month: int):
     """
     Расчет комунальных платежей.

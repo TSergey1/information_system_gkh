@@ -13,11 +13,10 @@ class WaterMetreSerializer(serializers.ModelSerializer):
     class Meta:
         model = WaterMeter
         fields = ('id',
-                  'number',
                   'value',
-                  'tariff',)
-        extra_kwargs = {'number': {'required': False},
-                        'value': {'required': False}}
+                  'date',
+                  'tariff',
+                  'apartment', )
 
 
 class ApartmentSerializer(serializers.ModelSerializer):
@@ -31,8 +30,9 @@ class ApartmentSerializer(serializers.ModelSerializer):
         model = Apartment
         fields = ('number',
                   'area',
-                  'water_meter',
                   'house',)
+        read_only_fields = ('__all__',)
+        
 
     # def create(self, validated_data):
     #     water_meters = validated_data.pop('water_meter')
@@ -41,15 +41,15 @@ class ApartmentSerializer(serializers.ModelSerializer):
     #         WaterMeter.objects.create(**water_meter)
     #     return apartment
 
-    # def create(self, validated_data):
-    #     water_meters = validated_data.pop('water_meter')
-    #     w_t = []
-    #     for water_meter in water_meters:
-    #         w = WaterMeter.objects.create(**water_meter)
-    #         w_t.append(w)
-    #     apartment = Apartment.objects.create(water_meter=w_t, **validated_data)
-    #     # WaterMeter.objects.create(**water_meter)
-    #     return apartment
+    def create(self, validated_data):
+        water_meters = validated_data.pop('water_meter')
+        w_t = []
+        for water_meter in water_meters:
+            w = WaterMeter.objects.create(**water_meter)
+            w_t.append(w)
+        apartment = Apartment.objects.create(water_meter=w_t, **validated_data)
+        # WaterMeter.objects.create(**water_meter)
+        return apartment
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -63,5 +63,4 @@ class HouseSerializer(serializers.ModelSerializer):
 
     def get_apartments(self, obj):
         """Получение квартир."""
-        return obj.apartments.values('id',
-                                     'area')
+        return obj.apartments.values('id', 'number', 'area', 'house')
