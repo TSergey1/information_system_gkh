@@ -13,7 +13,7 @@ DICT_ERRORS = {
 
 
 class WaterMeterSerializer(serializers.ModelSerializer):
-    """Сериализатор квартиры."""
+    """Сериализатор счетчика."""
     class Meta:
         model = WaterMeter
         fields = ('id',
