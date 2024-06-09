@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import serializers
 
 from houses.models import Apartment, House, WaterMeter
@@ -12,9 +14,6 @@ DICT_ERRORS = {
 
 class WaterMeterSerializer(serializers.ModelSerializer):
     """Сериализатор квартиры."""
-    # number = serializers.IntegerField(required=False)
-    # value = serializers.IntegerField(required=False)
-    # id = serializers.IntegerField()
 
     class Meta:
         model = WaterMeter
@@ -32,11 +31,18 @@ class WaterMeterSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        """Повторное отправление данных в один день обновит данные в БД."""
+        """
+        Повторное отправление данных в текущем месяце обновит данные в БД.
+        """
 
         value = validated_data.pop('value')
 
-        if WaterMeter.objects.filter(**validated_data).exists():
+        if WaterMeter.objects.filter(
+            date__month=date.today().month,
+            date__year=date.today().year,
+            **validated_data
+        ).exists():
+
             water_meter = WaterMeter.objects.filter(
                 **validated_data
             )[0]
@@ -88,3 +94,10 @@ class HouseSerializer(serializers.ModelSerializer):
     def get_apartments(self, obj):
         """Получение квартир."""
         return obj.apartments.values('id', 'number', 'area', 'house')
+
+
+class RentSerializer(serializers.Serializer):
+    """Сериализатор квартплаты."""
+    class Meta:
+        model = House
+        fields = ('id', 'text', 'author', 'image', 'group', 'pub_date')
