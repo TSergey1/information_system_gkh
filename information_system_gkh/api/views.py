@@ -78,8 +78,17 @@ class RentView(APIView):
                      'water_meter__tariff__price',
                      )
         print(qw_st)
-        # rezult_dict = {}
+        # all_rent = []
         # for value in qw_st:
+        #     apartment = ''
+        #     if not apartment:
+        #         apartment = value['number']
+        #     rez = {
+        #         'Квартира №': value['number'],
+        #         'Квартира ': value['number']
+        #     }
+        #     all_rent.append(rez)
+
 
         # rez = {
         #     '111': '112',
