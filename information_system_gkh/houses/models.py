@@ -1,10 +1,11 @@
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
-DICT_ERRORS = {
-   'value_max': 'Показания должны содержать не более 5 символов'
-}
+# DICT_ERRORS = {
+#    'invalid_number': ('Веден неверный номер квартиры.'
+#                       'Значение дожно быть от 1 до 5000')
+# }
 
 
 class Tariff(models.Model):
@@ -45,7 +46,10 @@ class House(models.Model):
 
 class Apartment(models.Model):
     """Модель квартиры."""
-    number = models.PositiveSmallIntegerField(verbose_name='Номер квартиры')
+    number = models.PositiveSmallIntegerField(
+        verbose_name='Номер квартиры',
+        validators=[MinValueValidator(1), MaxValueValidator(5000)]
+    )
     area = models.FloatField(verbose_name='Площадь квартиры')
     house = models.ForeignKey(House, on_delete=models.CASCADE)
 
@@ -54,6 +58,13 @@ class Apartment(models.Model):
         default_related_name = 'apartments'
         verbose_name = 'Квартира'
         verbose_name_plural = 'Квартиры'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['number', 'house'],
+                name='unique_name_measurement_unit'
+            )
+        ]
 
     def __str__(self):
         return str(self.number)
@@ -64,15 +75,12 @@ class WaterMeter(models.Model):
 
     value = models.PositiveIntegerField(
         verbose_name='Показания счетчика',
-        validators=[
-            MaxValueValidator(5, message='{0}'.format(
-                DICT_ERRORS.get('value_max')))
-        ],
+        validators=[MinValueValidator(1), MaxValueValidator(99999)],
         help_text='Введите показания до запятой'
     )
     date = models.DateField(
         auto_now_add=True,
-        verbose_name='Дата и время показаний',
+        verbose_name='Дата показаний',
     )
     tariff = models.ForeignKey(Tariff,
                                on_delete=models.CASCADE,
