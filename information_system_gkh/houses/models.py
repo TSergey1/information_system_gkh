@@ -1,3 +1,4 @@
+from datetime import date
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -79,7 +80,8 @@ class WaterMeter(models.Model):
         help_text='Введите показания до запятой'
     )
     date = models.DateField(
-        auto_now_add=True,
+        # auto_now_add=True,
+        default=date.today(),
         verbose_name='Дата показаний',
     )
     tariff = models.ForeignKey(Tariff,

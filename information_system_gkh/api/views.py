@@ -70,10 +70,11 @@ class RentView(APIView):
         month = self.kwargs.get('month')
         qw_st = Apartment.objects.filter(house=house_id).prefetch_related(
             'water_meter'
-        ).filter(water_meter__date__month=month,
+        ).filter(water_meter__date__month__range=(month-1, month),
                  water_meter__date__year=date.today().year).values(
                      'number',
                      'area',
+                     'water_meter__date',
                      'water_meter__value',
                      'water_meter__tariff__price',
                      )
