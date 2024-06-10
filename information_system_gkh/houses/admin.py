@@ -42,6 +42,7 @@ class ApartmentAdmin(admin.ModelAdmin):
 class HouseAdmin(admin.ModelAdmin):
     list_display = (
         'address',
+        'tariff_property',
     )
     search_fields = ('address', )
     empty_value_display = '-пусто-'

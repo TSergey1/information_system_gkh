@@ -88,7 +88,8 @@ class HouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = House
         fields = ('apartments',
-                  'address',)
+                  'address',
+                  'tariff_property', )
 
     def get_apartments(self, obj):
         """Получение квартир."""

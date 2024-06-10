@@ -1,6 +1,7 @@
 from datetime import date
-
+from decimal import Decimal
 from django.db.models import F, OuterRef, Subquery, Sum
+from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -50,6 +51,9 @@ class RentView(APIView):
         house_id = self.kwargs.get('house_id')
         month = self.kwargs.get('month')
 
+        property_price = get_object_or_404(House, pk=house_id)
+        print(property_price)
+
         prev_month_readings = WaterMeter.objects.filter(
             date__month=(month - 1),
             date__year=date.today().year,
@@ -67,11 +71,9 @@ class RentView(APIView):
                 previous_value=Subquery(prev_month_readings.values('value')),
                 cost=((F('water_meter__value') - F('previous_value'))
                       * F('water_meter__tariff'))
-            ).values(
-                'number',
-                'area',
-                'cost'
-            )
+            ).values('number').annotate(cost_water=Sum('cost'),
+                                        cost_property=F('area')
+                                        * F('house__tariff_property__price'))
         )
         print(qw_st)
         return Response({'message': 'Это был GET-запрос!'})

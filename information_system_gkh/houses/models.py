@@ -3,12 +3,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
-# DICT_ERRORS = {
-#    'invalid_number': ('Веден неверный номер квартиры.'
-#                       'Значение дожно быть от 1 до 5000')
-# }
-
-
 class Tariff(models.Model):
     """Модель тарифа."""
     NAME_TARIFF = [
@@ -35,6 +29,9 @@ class House(models.Model):
     """Модель дома."""
     address = models.CharField(max_length=255, unique=True,
                                verbose_name='Адрес дома',)
+    tariff_property = models.ForeignKey(Tariff,
+                                        on_delete=models.CASCADE,
+                                        verbose_name='Тариф общего имущества')
 
     class Meta:
         ordering = ('address',)
@@ -51,7 +48,9 @@ class Apartment(models.Model):
         verbose_name='Номер квартиры',
         validators=[MinValueValidator(1), MaxValueValidator(5000)]
     )
-    area = models.FloatField(verbose_name='Площадь квартиры')
+    area = models.DecimalField(max_digits=3,
+                               decimal_places=1,
+                               verbose_name='Площадь квартиры',)
     house = models.ForeignKey(House, on_delete=models.CASCADE)
 
     class Meta:
