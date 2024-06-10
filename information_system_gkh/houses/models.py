@@ -94,7 +94,7 @@ class WaterMeter(models.Model):
     )
 
     class Meta:
-        ordering = ('date',)
+        ordering = ('tariff',)
         default_related_name = 'water_meter'
         verbose_name = 'Счетчик воды'
         verbose_name_plural = 'Счетчики воды'

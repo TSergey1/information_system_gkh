@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.db.models import F, OuterRef, Subquery
+from django.db.models import F, OuterRef, Subquery, Sum
 from rest_framework import mixins, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -53,8 +53,8 @@ class RentView(APIView):
         prev_month_readings = WaterMeter.objects.filter(
             date__month=(month - 1),
             date__year=date.today().year,
-            apartment=OuterRef('pk')
-            # tariff=OuterRef('pk')
+            apartment=OuterRef('pk'),
+            tariff=OuterRef('water_meter__tariff')
         )
 
         qw_st = (
@@ -62,15 +62,15 @@ class RentView(APIView):
             .prefetch_related('water_meter')
             .filter(
                 water_meter__date__month=month,
-                water_meter__date__year=date.today().year,
+                water_meter__date__year=date.today().year
             ).annotate(
                 previous_value=Subquery(prev_month_readings.values('value')),
-                dif=F('water_meter__value') - F('previous_value')
+                cost=((F('water_meter__value') - F('previous_value'))
+                      * F('water_meter__tariff'))
             ).values(
                 'number',
                 'area',
-                'dif',
-                'water_meter__tariff'
+                'cost'
             )
         )
         print(qw_st)
