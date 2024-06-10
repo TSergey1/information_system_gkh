@@ -62,47 +62,32 @@ class RentView(APIView):
         prev_month_readings = WaterMeter.objects.filter(
             date__month=(month - 1),
             date__year=date.today().year,
-            apartment__house=house_id
-        ).values('value')
+            apartment=OuterRef('pk'),
+            tariff=OuterRef('pk')
+        )
 
         qw_st = (
             Apartment.objects.filter(house=house_id)
-            .prefetch_related("water_meter")
+            .prefetch_related('water_meter')
             .filter(
                 water_meter__date__month=month,
                 water_meter__date__year=date.today().year,
             ).annotate(
-                total_cost=F("water_meter__value")
-                * F("water_meter__tariff__price"),
-                prev_month_reading=Subquery(prev_month_readings),
-                diff=F("water_meter__value") - OuterRef("prev_month_reading"),
-            )
-            .values(
-                "number",
-                "area",
-                "water_meter__value",
-                "water_meter__tariff__price",
-                "total_cost",
-                "prev_month_reading",
-                "diff",
+                previous_value=Subquery(prev_month_readings.filter(tariff='water_meter__tariff').values('value')),
+                dif=F('water_meter__value') - F('previous_value')
+                # previous_value=Subquery(prev_month_readings.values('value'))
+                # total_cost=(
+                #     (F('water_meter__value') - F('previous_value'))*F('water_meter__tariff__price')
+                # )
+                # prev_month_reading=Subquery(prev_month_readings),
+                # total_cost=F('diff_value')*F('water_meter__tariff__price'),
+            ).values(
+                'number',
+                'area',
+                # 'total_cost',
+                'dif',
+                'water_meter__tariff'
             )
         )
         print(qw_st)
-        # all_rent = []
-        # for value in qw_st:
-        #     apartment = ''
-        #     if not apartment:
-        #         apartment = value['number']
-        #     rez = {
-        #         'Квартира №': value['number'],
-        #         'Квартира ': value['number']
-        #     }
-        #     all_rent.append(rez)
-
-
-        # rez = {
-        #     '111': '112',
-        #     '111': '112'
-        # }
-        # return Response(rez, status=status.HTTP_200_OK)
         return Response({'message': 'Это был GET-запрос!'})
