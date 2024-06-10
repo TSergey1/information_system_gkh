@@ -69,7 +69,6 @@ class RentView(APIView):
             ).values(
                 'number',
                 'area',
-                # 'total_cost',
                 'dif',
                 'water_meter__tariff'
             )
