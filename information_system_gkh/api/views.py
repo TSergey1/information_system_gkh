@@ -62,8 +62,8 @@ class RentView(APIView):
         prev_month_readings = WaterMeter.objects.filter(
             date__month=(month - 1),
             date__year=date.today().year,
-            apartment=OuterRef('pk'),
-            tariff=OuterRef('pk')
+            apartment=OuterRef('pk')
+            # tariff=OuterRef('pk')
         )
 
         qw_st = (
@@ -73,7 +73,7 @@ class RentView(APIView):
                 water_meter__date__month=month,
                 water_meter__date__year=date.today().year,
             ).annotate(
-                previous_value=Subquery(prev_month_readings.filter(tariff='water_meter__tariff').values('value')),
+                previous_value=Subquery(prev_month_readings.values('value')),
                 dif=F('water_meter__value') - F('previous_value')
                 # previous_value=Subquery(prev_month_readings.values('value'))
                 # total_cost=(
