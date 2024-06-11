@@ -1,4 +1,4 @@
-# Задание (кварт плата)
+# Information_system_gkh
 [![License MIT](https://img.shields.io/badge/licence-MIT-green)](https://opensource.org/license/mit/)
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
@@ -7,9 +7,8 @@
 [![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
 
 <details> 
-  <summary>Текстовое задание</summary>
-
-## Задание:
+  <summary>Описание</summary>
+  
 1.	Реализовать модели данных «Дом», «Квартира», «Счётчик воды», «Тариф»,
 учитывая связи между ними.
 В доме может быть много квартир. В квартире может быть несколько счётчиков.
@@ -34,7 +33,6 @@
 На усмотрение кандидата. Рекомендуется использовать django, celery, postgresql.
 </details>
 
-
 # Подготовка и запуск проекта
 Склонировать репозиторий на локальную машину:
 ```
@@ -48,11 +46,11 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 Сервер слушает по адресу ``` http://127.0.0.1:8000 ```
 
 ## Справка по API
-В самом начале необходимо создать в администритивной панели Тарифы:
+В самом начале необходимо создать в администритивной панели Тарифы ```http://127.0.0.1:8000/admin/```:
 - Тариф для горячей воды (name=hot)
 - Тариф для холодной воды (name=cold)
 - Тариф для общего имущества (name=property)
-```http://127.0.0.1:8000/admin/```
+
 
 <details>
     <summary>Houses</summary>
