@@ -7,7 +7,7 @@ from houses.models import Apartment, House, WaterMeter
 DICT_ERRORS = {
     'unique_number': 'Квартира с таким номером уже создана ранее.',
     'invalid_number': ('Веден неверный номер квартиры.'
-        'Значение дожно быть от 1 до 5000'),
+                       'Значение дожно быть от 1 до 5000'),
     'invalid_value': ('Значение дожно быть от 1 до 99999')
 }
 
