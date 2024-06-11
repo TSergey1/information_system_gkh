@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (Apartment, House, Tariff, WaterMeter)
+from .models import Apartment, House, Tariff, WaterMeter
 
 
 @admin.register(Tariff)

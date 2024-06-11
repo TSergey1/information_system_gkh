@@ -1,4 +1,5 @@
 from datetime import date
+
 from django.db.models import F, OuterRef, Subquery, Sum
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins
@@ -7,9 +8,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
+from houses.models import Apartment, House, WaterMeter
+
 from .serializers import (ApartmentSerializer, HouseSerializer,
                           WaterMeterSerializer)
-from houses.models import Apartment, House, WaterMeter
 
 
 class ReadOrCreateViewSet(mixins.CreateModelMixin,
