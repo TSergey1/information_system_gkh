@@ -67,7 +67,10 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 
 #### Получить дом по pk
 ``` http GET /api/houses/<int:pk>/ ```
+</details>
 
+<details>
+    <summary>Аpartment</summary>
 #### Создание новой квартиры
 ``` http POST /api/apartments/ ```
 | Parameter | Type     | Description                        |
@@ -81,7 +84,10 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 
 #### Получить квартиру по pk
 ``` http GET /api/apartments/<int:pk>/ ```
+</details>
 
+<details>
+    <summary>Watermeter</summary>
 #### Создание показаний счетчика
 ``` http POST /api/watermeters/ ```
 | Parameter | Type     | Description                        |
@@ -95,3 +101,4 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 
 #### Получить счетчик по pk
 ``` http GET /api/watermeters/<int:pk>/ ```
+</details>
