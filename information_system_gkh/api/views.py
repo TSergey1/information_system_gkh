@@ -1,15 +1,14 @@
 from datetime import date
-from decimal import Decimal
 from django.db.models import F, OuterRef, Subquery, Sum
 from django.shortcuts import get_object_or_404
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from .serializers import (ApartmentSerializer, HouseSerializer,
-                          RentSerializer, WaterMeterSerializer)
+                          WaterMeterSerializer)
 from houses.models import Apartment, House, WaterMeter
 
 
@@ -47,7 +46,7 @@ class WaterMeterViewSet(ReadOrCreateViewSet):
 class RentView(APIView):
     """APIView  расчета квартплаты."""
 
-    def get(self, request, *args, **kwargs):
+    def get(self):
         house_id = self.kwargs.get('house_id')
         month = self.kwargs.get('month')
 

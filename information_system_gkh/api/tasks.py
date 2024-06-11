@@ -12,16 +12,4 @@ def start_calculation(id_house: int, month: int):
     id_house - id дома в DB
     month - порядковый номер месяца от 1 до 12
     """
-    result = {}
-    tariff = Tariff.objects.all()
-    apartments = Apartment.objects.select_related(
-        'water_meter',
-        'water_meter__value'
-    ).filter(
-        house=id_house,
-        water_meter__value__date__range=(
-            datetime.date(datetime.now().year, month-1, 1),
-            datetime.date(datetime.now().year, month, 1)
-        )
-    )
-    print(apartments)
+    pass
