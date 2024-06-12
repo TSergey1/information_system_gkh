@@ -73,6 +73,7 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 
 <details>
     <summary>Аpartment</summary>
+
 #### Создание новой квартиры
 ``` http POST /api/apartments/ ```
 | Parameter | Type     | Description                        |
@@ -90,6 +91,7 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 
 <details>
     <summary>Watermeter</summary>
+
 #### Создание показаний счетчика
 ``` http POST /api/watermeters/ ```
 | Parameter | Type     | Description                        |
