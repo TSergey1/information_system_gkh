@@ -3,11 +3,11 @@ from datetime import date
 from celery import shared_task
 from django.db.models import F, OuterRef, Subquery, Sum
 
-from houses.models import Apartment, WaterMeter
+from houses.models import Apartment, Rent, WaterMeter
 
 
 @shared_task
-def start_calculation(house_id: int, month: int):
+def calculation_rent(house_id: int, month: int):
     """
     Расчет комунальных платежей.
     id_house - id дома в DB
@@ -34,4 +34,21 @@ def start_calculation(house_id: int, month: int):
                                         cost_property=F('area')
                                         * F('house__tariff_property__price'))
         )
-    print(f'РЕЗУЛЬТАТЫ РАСЧЕТА-{qw_st}')
+    data = []
+    for value in qw_st:
+        number = value.get('number')
+        cost_water = value.get('cost_water')
+        cost_property = value.get('cost_property')
+        data.append(
+            Rent(
+                apartment=Apartment.objects.filter(number=number,
+                                                   house=house_id)[0],
+                cost_water=cost_water,
+                cost_property=cost_property
+            )
+        )
+    rez_list: list[Rent] = Rent.objects.bulk_create(
+        data,
+        ignore_conflicts=True
+    )
+    print(rez_list)

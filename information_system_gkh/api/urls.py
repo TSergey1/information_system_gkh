@@ -17,6 +17,7 @@ router.register(r'watermeters', WaterMeterViewSet, basename='water_meters')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path(r'houses/<int:house_id>/month/<int:month>/', RentView.as_view(),
+    path(r'houses/<int:house_id>/month/<int:month>/',
+         RentView.as_view(),
          name='rent'),
 ]
