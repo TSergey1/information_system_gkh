@@ -35,6 +35,7 @@ def calculation_rent(house_id: int, month: int):
                                         * F('house__tariff_property__price'))
         )
     data = []
+    # rent_list = 'Cписок квартплаты:'
     for value in qw_st:
         number = value.get('number')
         cost_water = value.get('cost_water')
@@ -47,8 +48,11 @@ def calculation_rent(house_id: int, month: int):
                 cost_property=cost_property
             )
         )
+        # rent_list += f'{number} = Вода{cost_water}р.; Исущество{cost_property}р.'
+        
     rez_list: list[Rent] = Rent.objects.bulk_create(
         data,
         ignore_conflicts=True
     )
+    rent_list
     print(rez_list)
