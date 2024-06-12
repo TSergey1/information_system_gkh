@@ -24,7 +24,7 @@ def add_rent_in_db(qw_st: QuerySet[Rent], house_id: int) -> None:
             )
         )
 
-    return Rent.objects.bulk_create(
+    Rent.objects.bulk_create(
         data,
         ignore_conflicts=True
     )
