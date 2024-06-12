@@ -15,18 +15,9 @@ services:
         interval: 5s
         timeout: 5s
         retries: 15
-  
-  migrate:
-    build: ./test_drf_authorization/
-    container_name: django_migrate
-    command: python manage.py migrate
-    env_file: .env
-    depends_on:
-      db:
-        condition: service_healthy
  
   web:
-    build: ./test_drf_authorization/
+    build: ./information_system_gkh/
     container_name: django
     command: python manage.py runserver  0.0.0.0:8000
     ports:
@@ -38,6 +29,15 @@ services:
       migrate:
         condition: service_completed_successfully
 
+  migrate:
+    build: ./information_system_gkh/
+    container_name: django_migrate
+    command: python manage.py migrate
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+
   redis:
     image: redis:7.0.5-alpine
     container_name: redis
@@ -46,10 +46,10 @@ services:
       - '6379:6379'
 
   task_worker:
-    build: .
+    build: ./information_system_gkh/
     container_name: task_worker
     entrypoint: celery
-    command: -A information_system_gkh.celery.app worker -B --loglevel=DEBUG
+    command: -A information_system_gkh.celery.app worker --loglevel=DEBUG
     restart: always
     links:
       - redis
@@ -61,9 +61,9 @@ services:
 
   flower:
     container_name: flower
-    build: .
+    build: ./information_system_gkh/
     entrypoint: celery
-    command: -A cherry.celery.app flower
+    command: -A information_system_gkh.celery.app flower
     restart: always
     links:
       - redis
