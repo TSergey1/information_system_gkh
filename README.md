@@ -46,10 +46,12 @@ git clone git@github.com:TSergey1/information_system_gkh.git
 Сервер слушает по адресу ``` http://127.0.0.1:8000 ```
 
 ## Справка по API
-В самом начале необходимо создать в администритивной панели Тарифы ```http://127.0.0.1:8000/admin/```:
+В самом начале необходимо создать в администритивной панели Тарифы через superusera ```http://127.0.0.1:8000/admin/```:
 - Тариф для горячей воды (name=hot)
 - Тариф для холодной воды (name=cold)
 - Тариф для общего имущества (name=property)
+Создание суперюзера:
+```docker compose -f docker-compose.yaml exec web python manage.py createsuperuser```
 
 
 <details>
