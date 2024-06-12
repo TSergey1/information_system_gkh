@@ -2,8 +2,32 @@ from datetime import date
 
 from celery import shared_task
 from django.db.models import F, OuterRef, Subquery, Sum
+from django.db.models.query import QuerySet
 
 from houses.models import Apartment, Rent, WaterMeter
+
+
+def add_rent_in_db(qw_st: QuerySet[Rent], house_id: int) -> None:
+    """Добавление Rent в БД."""
+    data = []
+
+    for value in qw_st:
+        number = value.get('number')
+        cost_water = value.get('cost_water')
+        cost_property = value.get('cost_property')
+        data.append(
+            Rent(
+                apartment=Apartment.objects.filter(number=number,
+                                                   house=house_id)[0],
+                cost_water=cost_water,
+                cost_property=cost_property
+            )
+        )
+
+    return Rent.objects.bulk_create(
+        data,
+        ignore_conflicts=True
+    )
 
 
 @shared_task
@@ -34,25 +58,5 @@ def calculation_rent(house_id: int, month: int):
                                         cost_property=F('area')
                                         * F('house__tariff_property__price'))
         )
-    data = []
-    # rent_list = 'Cписок квартплаты:'
-    for value in qw_st:
-        number = value.get('number')
-        cost_water = value.get('cost_water')
-        cost_property = value.get('cost_property')
-        data.append(
-            Rent(
-                apartment=Apartment.objects.filter(number=number,
-                                                   house=house_id)[0],
-                cost_water=cost_water,
-                cost_property=cost_property
-            )
-        )
-        # rent_list += f'{number} = Вода{cost_water}р.; Исущество{cost_property}р.'
-        
-    rez_list: list[Rent] = Rent.objects.bulk_create(
-        data,
-        ignore_conflicts=True
-    )
-    rent_list
-    print(rez_list)
+
+    add_rent_in_db(qw_st, house_id)

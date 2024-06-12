@@ -9,11 +9,6 @@ router = DefaultRouter()
 router.register(r'houses', HouseViewSet, basename='houses')
 router.register(r'apartments', ApartmentViewSet, basename='apartments')
 router.register(r'watermeters', WaterMeterViewSet, basename='water_meters')
-# router.register(
-#     r'houses/(?P<house_id>\d+)/month/(?P<month>\d+)',
-#     RentViewSet,
-#     basename='rent'
-# )
 
 urlpatterns = [
     path('', include(router.urls)),
