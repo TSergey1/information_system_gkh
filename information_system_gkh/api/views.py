@@ -47,9 +47,6 @@ class RentView(APIView):
     """
 
     def get(self, request, *args, **kwargs):
-        # house_id = self.kwargs.get('house_id')
-        # month = self.kwargs.get('month')
-
         calculation_rent.delay(self.kwargs.get('house_id'),
                                self.kwargs.get('month'))
         return Response({'message': 'Расчет квартплаты запущен!'})
