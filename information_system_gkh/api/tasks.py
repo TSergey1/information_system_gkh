@@ -34,4 +34,4 @@ def start_calculation(house_id: int, month: int):
                                         cost_property=F('area')
                                         * F('house__tariff_property__price'))
         )
-    print(qw_st)
+    print(f'РЕЗУЛЬТАТЫ РАСЧЕТА-{qw_st}')
