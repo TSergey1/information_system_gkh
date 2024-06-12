@@ -43,7 +43,7 @@ class WaterMeterViewSet(ReadOrCreateViewSet):
 
 class RentView(APIView):
     """
-    APIView  расчета квартплаты. Запись ее в БД. И скачивание результатов
+    APIView  расчета квартплаты. Запись ее в БД.
     """
 
     def get(self, request, *args, **kwargs):
