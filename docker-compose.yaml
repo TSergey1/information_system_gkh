@@ -19,7 +19,7 @@ services:
   web:
     build: ./information_system_gkh/
     container_name: django
-    command: python manage.py runserver  0.0.0.0:8000
+    command: gunicorn --bind 0.0.0.0:8000 information_system_gkh.wsgi:application --workers 4
     ports:
       - 8000:8000
     env_file: .env
